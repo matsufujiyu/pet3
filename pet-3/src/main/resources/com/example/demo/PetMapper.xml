@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.PetMapper">
+
+	<select id="findAll" resultMap="PetResultMap">
+		select
+		p.id as pet_id
+		,p.category
+		as category_id
+		,p.name as pet_name
+		,p.status as pet_status
+		,c.name as
+		category_name
+		,t.tag_id
+		,t2.name as tag_name
+		from
+		pets p
+		left join
+		category
+		c
+		on
+		p.category=c.id
+		left join
+		tag t
+		on
+		p.id=t.pet_id
+		left join
+		tags t2
+		on
+		t.tag_id=t2.id
+		order by
+		p.id;
+	</select>
+	<select id="findById" resultMap="PetResultMap">
+		select
+		p.id as pet_id
+		,p.category
+		as category_id
+		,p.name as pet_name
+		,p.status as pet_status
+		,c.name as
+		category_name
+		,t.tag_id
+		,t2.name as tag_name
+		from
+		pets p
+		left join
+		category
+		c
+		on
+		p.category=c.id
+		left join
+		tag t
+		on
+		p.id=t.pet_id
+		left join
+		tags t2
+		on
+		t.tag_id=t2.id
+		where
+		p.id=#{id}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+	
+		INSERT
+		INTO pets (category,name,status) VALUES
+		(#{pets.category},#{pets.name},#{pets.status});
+<!--		SET @insert_id = LAST_INSERT_ID();-->
+<!--		INSERT-->
+<!--		INTO category (name) select name from category-->
+<!--		where category.id=#{pets.category};-->
+<!--		insert INTO tag (pet_id,tag_id) value(@insert_id,#{tags.id})-->
+
+	</insert>
+	<resultMap id="PetResultMap" type="com.example.demo.Pet">
+
+		<id property="id" column="pet_id" />
+		<result property="name" column="pet_name" />
+		<result property="status" column="pet_status" />
+
+		<association property="category"
+			javaType="com.example.demo.Category">
+			<id property="id" column="category_id" />
+			<result property="name" column="category_name" />
+		</association>
+		<collection property="tags" ofType="com.example.demo.Tag">
+			<id property="id" column="tag_id" />
+			<result property="name" column="tag_name" />
+		</collection>
+
+	</resultMap>
+
+
+</mapper>
